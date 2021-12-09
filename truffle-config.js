@@ -1,4 +1,6 @@
 const path = require("path");
+const MNEMONIC = require("./secret.json").mnemonic;
+var HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -7,8 +9,18 @@ module.exports = {
   networks: {
     local: {
       host: "localhost",
-      port: 8545,
+      port: 7545,
       network_id: "*" // Match any network id
+    },
+    ropsten: {
+      provider: function () {
+        return new HDWalletProvider(MNEMONIC, `https://speedy-nodes-nyc.moralis.io/739777e61d0fd6e73ac9bfdc/eth/ropsten`)
+      },
+      network_id: 3,
+      gas: 4000000,      //make sure this gas allocation isn't over 4M, which is the max
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
     }
   },
   compilers: {
